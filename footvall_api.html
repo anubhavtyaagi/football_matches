@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upcoming Soccer Matches</title>
+</head>
+<body>
+  <h1>Upcoming Soccer Matches</h1>
+  <ul id="match-list"></ul>
+
+  <script>
+    const apiKey = 'YOUR_RAPIDAPI_KEY'; // Replace with your actual key
+
+    fetch("https://api-football-v1.p.rapidapi.com/v3/fixtures?next=10", {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      const matches = data.response;
+      const matchList = document.getElementById("match-list");
+      matches.forEach(match => {
+        const li = document.createElement("li");
+        const home = match.teams.home.name;
+        const away = match.teams.away.name;
+        const date = new Date(match.fixture.date);
+        li.textContent = `${home} vs ${away} - ${date.toLocaleString()}`;
+        matchList.appendChild(li);
+      });
+    })
+    .catch(err => console.error(err));
+  </script>
+</body>
+</html>
